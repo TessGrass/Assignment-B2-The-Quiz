@@ -27,7 +27,7 @@ form input {
 
 .name {
     padding: 10px;
-    color: white;    
+    color: black;   
 }
 
 .submit {
@@ -58,12 +58,12 @@ customElements.define('custom-submit-form', class extends HTMLElement {
       .appendChild(template.content.cloneNode(true))
     this.submitBox = this.shadowRoot.querySelector('#submitbox')
     this.inputBox = this.shadowRoot.querySelector('#inputbox')
-    
   }
 
   connectedCallback() {
     this.submitBox.addEventListener('click', (event) => {
-      console.log(this.inputBox)
+      const inputValue = this.inputBox.firstElementChild.value
+      console.log(inputValue)
       event.preventDefault()
     })
   }
