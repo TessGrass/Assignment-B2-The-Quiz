@@ -12,7 +12,13 @@ form input {
     color: black;
 }
 
-.inputbox {
+#inputbox {
+    margin: 30px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;    
+}
+#submitbox {
     margin: 30px;
     background: transparent;
     border: none;
@@ -34,10 +40,10 @@ form input {
 </style>
 <form>
  <div class="wrapper">
-    <div class="inputbox">
+    <div id="inputbox">
         <input type="text" placeholder="YOUR AWESOME NAME!" class="name">
     </div>
-    <div class="inputbox">
+    <div id="submitbox">
         <input type="Submit" value="START GAME" class="submit">
     </div>
  </div>
@@ -50,5 +56,15 @@ customElements.define('custom-submit-form', class extends HTMLElement {
 
     this.attachShadow({ mode: 'open' })
       .appendChild(template.content.cloneNode(true))
+    this.submitBox = this.shadowRoot.querySelector('#submitbox')
+    this.inputBox = this.shadowRoot.querySelector('#inputbox')
+    
+  }
+
+  connectedCallback() {
+    this.submitBox.addEventListener('click', (event) => {
+      console.log(this.inputBox)
+      event.preventDefault()
+    })
   }
 })
