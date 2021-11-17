@@ -7,9 +7,6 @@
 
 import './components/quiz-logo/index.js'
 import './components/custom-submit-form/custom-submit-form.js'
-
-const formWrapper = document.querySelector('.formWrapper')
-const gameWrapper = document.querySelector('.gameWrapper')
-const quizLogo = document.createElement('custom-quiz-logo')
+import './quiz-application.js'
 
 // TODO: This is just some example code that you are free to use, modify or completely delete.

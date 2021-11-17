@@ -36,35 +36,49 @@ form input {
     box-shadow: inset 0 0 5px;
     color: black;    
 }
-
 </style>
 <form>
- <div class="wrapper">
     <div id="inputbox">
         <input type="text" placeholder="YOUR AWESOME NAME!" class="name">
     </div>
     <div id="submitbox">
         <input type="Submit" value="START GAME" class="submit">
     </div>
- </div>
 </form>
 `
+/**
+ *
+ *
+ */
 
-customElements.define('custom-submit-form', class extends HTMLElement {
-   constructor() {
-    super()
+customElements.define('custom-submit-form', /**
+cccccccccccccccccccccccccccccccccccccccccccc *
+cccccccccccccccccccccccccccccccccccccccccccc */
+  class extends HTMLElement {
+    /**
+     *
+     */
+    constructor () {
+      super()
 
-    this.attachShadow({ mode: 'open' })
-      .appendChild(template.content.cloneNode(true))
-    this.submitBox = this.shadowRoot.querySelector('#submitbox')
-    this.inputBox = this.shadowRoot.querySelector('#inputbox')
-  }
+      this.attachShadow({ mode: 'open' })
+        .appendChild(template.content.cloneNode(true))
+      this.submitBox = this.shadowRoot.querySelector('#submitbox')
+      this.inputBox = this.shadowRoot.querySelector('#inputbox')
+    }
+    /**
+     *
+     *
+     */
 
-  connectedCallback() {
-    this.submitBox.addEventListener('click', (event) => {
-      const inputValue = this.inputBox.firstElementChild.value
-      console.log(inputValue)
-      event.preventDefault()
-    })
-  }
-})
+    /**
+     *
+     */
+    connectedCallback () {
+      this.submitBox.addEventListener('click', (event) => {
+        const inputValue = this.inputBox.firstElementChild.value
+        console.log(inputValue)
+        event.preventDefault()
+      })
+    }
+  })
