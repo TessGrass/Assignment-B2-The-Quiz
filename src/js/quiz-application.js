@@ -65,9 +65,9 @@ customElements.define('fetch-question', class extends HTMLElement {
     this.question = this.shadowRoot.querySelector('#question')
     this.submitBox = this.shadowRoot.querySelector('#submitbox')
     this.inputBox = this.shadowRoot.querySelector('#inputbox')
-
-    // this.nextUrl = 'https://courselab.lnu.se/quiz/answer/'
-}
+    
+    this.nextUrl = 'https://courselab.lnu.se/quiz/question/1'
+  }
 
   /**
   *
@@ -76,7 +76,7 @@ customElements.define('fetch-question', class extends HTMLElement {
     this.fetchQuestion()
     this.submitBox.addEventListener('click', (event) => {
       const inputValue = this.inputBox.firstElementChild.value
-      this.postQuestion(inputValue)
+      this.postAnswerFromUser(inputValue)
       console.log(inputValue)
       event.preventDefault()
     })
@@ -86,16 +86,16 @@ customElements.define('fetch-question', class extends HTMLElement {
   *
   */
   async fetchQuestion () {
-    let resultGetQuestion = await window.fetch('https://courselab.lnu.se/quiz/question/1', {
+    let getQuestion = await window.fetch(this.nextUrl, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify()
     })
-    resultGetQuestion = await resultGetQuestion.json()
-    console.log(resultGetQuestion)
-    this.generateQuestion(resultGetQuestion)
+    getQuestion = await getQuestion.json()
+    console.log(getQuestion)
+    this.generateQuestion(getQuestion)
   }
 
     /**
@@ -108,18 +108,21 @@ customElements.define('fetch-question', class extends HTMLElement {
     /**
      *
      */
-  async postQuestion () {
-    const answerQuestion = await window.fetch('https://courselab.lnu.se/quiz/answer/1', {
+  async postAnswerFromUser () {
+    const receiveAnswerOfQuestion = await window.fetch('https://courselab.lnu.se/quiz/answer/1', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        answer: 2
+        answer: this.inputBox.firstElementChild.value
       })
     })
-    const resultAnswerQuestion = await answerQuestion.json()
-    console.log(resultAnswerQuestion)
+    const resultAnswerOfQuestion = await receiveAnswerOfQuestion.json()
+    console.log(resultAnswerOfQuestion)
+    const newUrl = 
+    
+
   }
 })
 
