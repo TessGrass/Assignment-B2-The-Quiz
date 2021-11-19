@@ -51,10 +51,7 @@ form input {
  *
  */
 
-customElements.define('custom-submit-form', /**
-cccccccccccccccccccccccccccccccccccccccccccc *
-cccccccccccccccccccccccccccccccccccccccccccc */
-  class extends HTMLElement {
+customElements.define('custom-submit-form', class extends HTMLElement {
     /**
      *
      */
@@ -72,6 +69,7 @@ cccccccccccccccccccccccccccccccccccccccccccc */
      */
 
     /**
+     *
      *
      */
     connectedCallback () {

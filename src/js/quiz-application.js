@@ -1,6 +1,16 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
+
+  #game {
+    text-align: center;
+    align-content: center;
+  }
+
+ 
+form {
+        color: red;
+    }
 form input {
     display: block;
     height: 80px:
@@ -38,25 +48,32 @@ form input {
     color: black;    
 }
 
+#radiobutton {
+    display: none;    
+}
+
 p {
-    color: red;
+  font-family: verdana;
+    color: white;
+    font-size: 18px;
 }
 </style>
+<div id="game">
 <p id="idquestion"></p>
  <p id="question"></p>
  <form>
     <div id="inputbox">
         <input type="text" placeholder="YOUR ANSWER" class="name">
     </div>
+    <div id="radiobutton">
+    </div>
     <div id="submitbox">
         <input type="Submit" value="NEXT QUESTION" class="submit">
     </div>
-</form>`
-
+</div>
+</form>
+`
 customElements.define('fetch-question', class extends HTMLElement {
-  /**
-   *
-   */
   constructor () {
     super()
 
@@ -65,28 +82,34 @@ customElements.define('fetch-question', class extends HTMLElement {
     this.question = this.shadowRoot.querySelector('#question')
     this.submitBox = this.shadowRoot.querySelector('#submitbox')
     this.inputBox = this.shadowRoot.querySelector('#inputbox')
-    
-    this.nextUrl = 'https://courselab.lnu.se/quiz/question/1'
+    this.radioButton = this.shadowRoot.querySelector('#radiobutton')
+    this.answerContainer = ''
+    this.getQuestionUrl = 'https://courselab.lnu.se/quiz/question/1'
+    this.getAnswerUrl = 'https://courselab.lnu.se/quiz/answer/1'
   }
 
   /**
-  *
-  */
+   *
+   *
+   */
   connectedCallback () {
     this.fetchQuestion()
     this.submitBox.addEventListener('click', (event) => {
-      const inputValue = this.inputBox.firstElementChild.value
-      this.postAnswerFromUser(inputValue)
-      console.log(inputValue)
+      // this.answerContainer = this.inputBox.firstElementChild.value 
+      //this.checkValueOfRadioButton()
+      this.checkTypeOfAnswer()
+      this.postAnswerFromUser(this.answerContainer)
       event.preventDefault()
     })
   }
 
   /**
-  *
-  */
+   * Fetching question from server.
+   *
+   */
   async fetchQuestion () {
-    let getQuestion = await window.fetch(this.nextUrl, {
+    console.log(this.getQuestionUrl + ' fetchQuestion')
+    let getQuestion = await window.fetch(this.getQuestionUrl, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json'
@@ -95,35 +118,130 @@ customElements.define('fetch-question', class extends HTMLElement {
     })
     getQuestion = await getQuestion.json()
     console.log(getQuestion)
-    this.generateQuestion(getQuestion)
+    this.displayQuestionSetAnswer(getQuestion)
   }
 
-    /**
-     * @param data
-     */
-  generateQuestion (data) {
-    this.question.textContent = data.question
+  /**
+   *
+   * @param {*} data
+   */
+  displayQuestionSetAnswer (data) {
+    this.question.textContent = data.question.toUpperCase() // Fråga visas i webbläsaren
+    this.getAnswerUrl = data.nextURL
+
+    console.log('getAnswerUrl: ' + this.getAnswerUrl)
+
+    if (data.alternatives) {
+      for (const [key, value] of Object.entries(data.alternatives)) {
+        const inputRadioEl = document.createElement('input')
+        const labelRadioEl = document.createElement('label')
+
+        inputRadioEl.setAttribute('type', 'radio')
+        inputRadioEl.setAttribute('name', 'answer')
+
+        labelRadioEl.innerText = value
+        inputRadioEl.id = key
+
+        this.radioButton.append(inputRadioEl, labelRadioEl)
+        console.log(this.radioButton + 'hej jag är en radioknapp')
+        this.inputBox.style.display = 'none'
+        this.radioButton.style.display = 'flex'
+      }
+    } else {
+      const theForm = this.shadowRoot.querySelector('form')
+
+      this.inputBox.style.display = 'block'
+      this.radioButton.style.display = 'none'
+    }
   }
 
-    /**
-     *
-     */
+  /**
+  * 
+  * 
+  */
   async postAnswerFromUser () {
-    const receiveAnswerOfQuestion = await window.fetch('https://courselab.lnu.se/quiz/answer/1', {
+    let receiveAnswerOfQuestion = await window.fetch(this.getAnswerUrl, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        answer: this.inputBox.firstElementChild.value
-      })
+      body: JSON.stringify({ answer: this.answerContainer })
     })
-    const resultAnswerOfQuestion = await receiveAnswerOfQuestion.json()
-    console.log(resultAnswerOfQuestion)
-    const newUrl = 
-    
-
+    receiveAnswerOfQuestion = await receiveAnswerOfQuestion.json()
+    console.log('postAnswerFromUser: ' + receiveAnswerOfQuestion.nextURL)
+    this.generateNextQuestionUrl(receiveAnswerOfQuestion)
   }
-})
 
-// {id: 1, question: 'What is 1+1?', limit: '5', nextURL: 'https://courselab.lnu.se/quiz/answer/1', message: 'You got your   question! Now send me the answer via HTTP POST to the nextURL in JSON-format'}
+  generateNextQuestionUrl (data) {
+    this.getQuestionUrl = data.nextURL
+    this.shadowRoot.querySelector('form').reset()
+    this.radioButton.innerHTML = ''
+    this.fetchQuestion()
+   //this.connectedCallback()
+  }
+
+  checkTypeOfAnswer () {
+    if (this.radioButton.children.length > 0) {
+      this.answerContainer = this.shadowRoot.querySelector('input[name="answer"]:checked').id.toLowerCase()
+    } else {
+      this.answerContainer = this.inputBox.firstElementChild.value
+    }
+  }
+  
+  // en funktion som kollar om det är radio eller inputvärde som ska hämtas, den kallar då´´på antingen checkValeOfRadiobutton eller checkValueOfInputField
+
+ /*   this.radioButton = this.shadowRoot.querySelectorAll('#inputbox')
+    if (this.checkForChecked.children.length > 0) {
+      const buttons = this.checkForChecked.querySelectorAll('input')
+      for (const button of buttons) {
+        if (button.checked) {
+          this.answerContainer = button.id.toLowerCase()
+        }
+      }
+    }
+}
+
+  /*checkTypeOfQuestion () {
+    console.log('hej')
+    this.radioButton.forEach((word) => {
+      console.log(word)
+    })
+  }
+
+  /**
+   *
+   *
+   */
+   /*testForButton () {
+    this.radioButton.style.display = 'flex'
+    for (const [key, value] of Object.entries(this.dataAlternatives)) {
+      console.log(key, value + 'key valuesss') // Skriv ut alternativen som ska länkas till radioknapparna
+      const inputRadioEl = document.createElement('input')
+      inputRadioEl.setAttribute('type', 'radio')
+      inputRadioEl.textContent = value
+      const labelRadioEl = document.CreateElement('label')
+      labelRadioEl.setAttribute('for', 'radio')
+      labelRadioEl.id = key
+
+      this.radioButton.append(inputRadioEl, labelRadioEl)
+    }
+    return this.radioButton
+  }
+
+  checkTypeOfQuestion () {
+    this.inputBox.style.display = 'none'
+    this.radioButton.style.display = 'flex'
+  }
+
+  // <input type="radio" id="radio"><label for="radio">ALT 1</label>
+  /*testForButton () {
+    console.log('testforbutton')
+    if (this.radioButton.style.display === 'none') {
+      this.radioButton.style.display = 'flex'
+      console.log('etta')
+    } else {
+      this.radioButton.style.display = 'none'
+      console.log('tvåa')
+    }
+  }*/
+})
