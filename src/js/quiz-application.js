@@ -148,8 +148,6 @@ customElements.define('fetch-question', class extends HTMLElement {
         this.radioButton.style.display = 'flex'
       }
     } else {
-      const theForm = this.shadowRoot.querySelector('form')
-
       this.inputBox.style.display = 'block'
       this.radioButton.style.display = 'none'
     }

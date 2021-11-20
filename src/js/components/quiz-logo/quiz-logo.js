@@ -5,8 +5,8 @@ template.innerHTML = `
     
   }
     img {
-      max-width: 55%;
-      max-height: 55%;
+      max-width: 75%;
+      max-height: 75%;
     }
 
 </style>
