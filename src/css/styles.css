@@ -39,5 +39,6 @@ body {
     padding: 10px;
 }
 
-#timer {
+#test {
+    display: none;
 }

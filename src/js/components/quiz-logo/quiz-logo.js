@@ -12,10 +12,8 @@ template.innerHTML = `
 </style>
 <img />
 `
+
 customElements.define('custom-quiz-logo', class extends HTMLElement {
-    /**
-     *
-     */
   constructor () {
     super()
 

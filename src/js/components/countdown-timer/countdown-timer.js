@@ -42,9 +42,11 @@ customElements.define('countdown-timer', class extends HTMLElement {
     this.timesUp = this.shadowRoot.querySelector('#timesup')
     this.count = ''
     this.timer = ''
+    
   }
 
   /**
+   * 
    * 
    */
   connectedCallback () {

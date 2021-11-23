@@ -52,27 +52,31 @@ form input {
  */
 
 customElements.define('custom-submit-form', class extends HTMLElement {
-    /**
-     *
-     */
-    constructor () {
-      super()
+  /**
+   *
+   */
+  constructor () {
+    super()
 
-      this.attachShadow({ mode: 'open' })
-        .appendChild(template.content.cloneNode(true))
-      this.submitBox = this.shadowRoot.querySelector('#submitbox')
-      this.inputBox = this.shadowRoot.querySelector('#inputbox')
-      this.inputValue = ''
-    }
+    this.attachShadow({ mode: 'open' })
+      .appendChild(template.content.cloneNode(true))
+    this.submitBox = this.shadowRoot.querySelector('#submitbox')
+    this.inputBox = this.shadowRoot.querySelector('#inputbox')
+    this.form = this.shadowRoot.querySelector('form')
+    this.inputValue = ''
+    this.form.style.display = 'block'
+  }
 
-    /**
-     *
-     *
-     */
+  /**
+   * Assigning the input value to variable.
+   *
+   */
   connectedCallback () {
     this.submitBox.addEventListener('click', (event) => {
       this.inputValue = this.inputBox.firstElementChild.value
       console.log(this.inputValue)
+      document.querySelector('fetch-question').setAttribute('display', 0)
+      this.form.style.display = 'none'
       event.preventDefault()
     })
   }

@@ -53,6 +53,7 @@ p {
     font-size: 14px;
 }
 </style>
+<div id="wrapper">
 <p id="idquestion"></p>
  <p id="question"></p>
  <form>
@@ -64,6 +65,7 @@ p {
     <div id="submitbox">
         <input type="Submit" value="NEXT QUESTION" class="submit">
     </div>
+</div>
 </form>
 `
 customElements.define('fetch-question', class extends HTMLElement {
@@ -76,21 +78,26 @@ customElements.define('fetch-question', class extends HTMLElement {
     this.submitBox = this.shadowRoot.querySelector('#submitbox')
     this.inputBox = this.shadowRoot.querySelector('#inputbox')
     this.radioButton = this.shadowRoot.querySelector('#radiobutton')
+    this.wrapper = this.shadowRoot.querySelector('#wrapper')
     this.answerContainer = ''
     this.checkLimit = ''
     this.getQuestionUrl = 'https://courselab.lnu.se/quiz/question/1'
     this.getAnswerUrl = 'https://courselab.lnu.se/quiz/answer/1'
+    this.wrapper.style.display = 'none'
+  }
+
+  static get observedAttributes () {
+    console.log('click')
+    return ['display']
   }
 
   /**
-   *
+   * Fetching the question, post answer from user.
    *
    */
   connectedCallback () {
     this.fetchQuestion()
     this.submitBox.addEventListener('click', (event) => {
-      // this.answerContainer = this.inputBox.firstElementChild.value 
-      //this.checkValueOfRadioButton()
       this.checkTypeOfAnswer()
       this.postAnswerFromUser(this.answerContainer)
       event.preventDefault()
@@ -116,20 +123,18 @@ customElements.define('fetch-question', class extends HTMLElement {
   }
 
   /**
+   * Displays the question in the browser, checks wether to use input field or radio button.
    *
-   * @param {*} data
+   * @param {object} data - the retrieved data from server.
    */
   displayQuestionSetAnswer (data) {
     this.question.textContent = data.question.toUpperCase() // Fråga visas i webbläsaren
     this.dispatchEvent(new CustomEvent('limit', {
       detail: { limit: data.limit },
-      bubbles: true,
-      composed: true
+      bubbles: true
     }))
+
     this.getAnswerUrl = data.nextURL
-
-    console.log('getAnswerUrl: ' + this.getAnswerUrl)
-
     if (data.alternatives) {
       for (const [key, value] of Object.entries(data.alternatives)) {
         const inputRadioEl = document.createElement('input')
@@ -157,9 +162,9 @@ customElements.define('fetch-question', class extends HTMLElement {
   }
 
   /**
-  * 
-  * 
-  */
+   * Post answer from user to the server.
+   *
+   */
   async postAnswerFromUser () {
     let receiveAnswerOfQuestion = await window.fetch(this.getAnswerUrl, {
       method: 'POST',
@@ -173,14 +178,23 @@ customElements.define('fetch-question', class extends HTMLElement {
     this.generateNextQuestionUrl(receiveAnswerOfQuestion)
   }
 
+  /**
+   * Generates new question.
+   *
+   * @param {object} data from server.
+   */
   generateNextQuestionUrl (data) {
+    console.log(data)
+    console.log('177')
     this.getQuestionUrl = data.nextURL
     this.shadowRoot.querySelector('form').reset()
     this.radioButton.innerHTML = ''
     this.fetchQuestion()
-   //this.connectedCallback()
   }
 
+  /**
+   * Check if the answer has been entered in a field or radio button.
+   */
   checkTypeOfAnswer () {
     if (this.radioButton.children.length > 0) {
       this.answerContainer = this.shadowRoot.querySelector('input[name="answer"]:checked').id.toLowerCase()
@@ -188,61 +202,10 @@ customElements.define('fetch-question', class extends HTMLElement {
       this.answerContainer = this.inputBox.firstElementChild.value
     }
   }
-  
-  // en funktion som kollar om det är radio eller inputvärde som ska hämtas, den kallar då´´på antingen checkValeOfRadiobutton eller checkValueOfInputField
 
- /*   this.radioButton = this.shadowRoot.querySelectorAll('#inputbox')
-    if (this.checkForChecked.children.length > 0) {
-      const buttons = this.checkForChecked.querySelectorAll('input')
-      for (const button of buttons) {
-        if (button.checked) {
-          this.answerContainer = button.id.toLowerCase()
-        }
-      }
+  attributeChangedCallback (name, oldValue, newValue) {
+    if (name === 'display') {
+      this.wrapper.style.display = 'block'
     }
-}
-
-  /*checkTypeOfQuestion () {
-    console.log('hej')
-    this.radioButton.forEach((word) => {
-      console.log(word)
-    })
   }
-
-  /**
-   *
-   *
-   */
-   /*testForButton () {
-    this.radioButton.style.display = 'flex'
-    for (const [key, value] of Object.entries(this.dataAlternatives)) {
-      console.log(key, value + 'key valuesss') // Skriv ut alternativen som ska länkas till radioknapparna
-      const inputRadioEl = document.createElement('input')
-      inputRadioEl.setAttribute('type', 'radio')
-      inputRadioEl.textContent = value
-      const labelRadioEl = document.CreateElement('label')
-      labelRadioEl.setAttribute('for', 'radio')
-      labelRadioEl.id = key
-
-      this.radioButton.append(inputRadioEl, labelRadioEl)
-    }
-    return this.radioButton
-  }
-
-  checkTypeOfQuestion () {
-    this.inputBox.style.display = 'none'
-    this.radioButton.style.display = 'flex'
-  }
-
-  // <input type="radio" id="radio"><label for="radio">ALT 1</label>
-  /*testForButton () {
-    console.log('testforbutton')
-    if (this.radioButton.style.display === 'none') {
-      this.radioButton.style.display = 'flex'
-      console.log('etta')
-    } else {
-      this.radioButton.style.display = 'none'
-      console.log('tvåa')
-    }
-  }*/
 })
