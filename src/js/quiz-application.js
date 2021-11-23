@@ -1,16 +1,7 @@
 const template = document.createElement('template')
 template.innerHTML = `
-<style>
+<style> 
 
-  #game {
-    text-align: center;
-    align-content: center;
-  }
-
- 
-form {
-        color: red;
-    }
 form input {
     display: block;
     height: 80px:
@@ -23,6 +14,7 @@ form input {
 }
 
 #inputbox {
+  color: black;
     margin: 30px;
     background: transparent;
     border: none;
@@ -49,16 +41,18 @@ form input {
 }
 
 #radiobutton {
-    display: none;    
+    display: none;
+    text-align: center;
+    color: white;
 }
 
 p {
+  text-align: center;
   font-family: verdana;
     color: white;
-    font-size: 18px;
+    font-size: 14px;
 }
 </style>
-<div id="game">
 <p id="idquestion"></p>
  <p id="question"></p>
  <form>
@@ -70,7 +64,6 @@ p {
     <div id="submitbox">
         <input type="Submit" value="NEXT QUESTION" class="submit">
     </div>
-</div>
 </form>
 `
 customElements.define('fetch-question', class extends HTMLElement {
@@ -84,6 +77,7 @@ customElements.define('fetch-question', class extends HTMLElement {
     this.inputBox = this.shadowRoot.querySelector('#inputbox')
     this.radioButton = this.shadowRoot.querySelector('#radiobutton')
     this.answerContainer = ''
+    this.checkLimit = ''
     this.getQuestionUrl = 'https://courselab.lnu.se/quiz/question/1'
     this.getAnswerUrl = 'https://courselab.lnu.se/quiz/answer/1'
   }
@@ -127,6 +121,11 @@ customElements.define('fetch-question', class extends HTMLElement {
    */
   displayQuestionSetAnswer (data) {
     this.question.textContent = data.question.toUpperCase() // Fråga visas i webbläsaren
+    this.dispatchEvent(new CustomEvent('limit', {
+      detail: { limit: data.limit },
+      bubbles: true,
+      composed: true
+    }))
     this.getAnswerUrl = data.nextURL
 
     console.log('getAnswerUrl: ' + this.getAnswerUrl)
@@ -143,13 +142,17 @@ customElements.define('fetch-question', class extends HTMLElement {
         inputRadioEl.id = key
 
         this.radioButton.append(inputRadioEl, labelRadioEl)
-        console.log(this.radioButton + 'hej jag är en radioknapp')
         this.inputBox.style.display = 'none'
         this.radioButton.style.display = 'flex'
       }
     } else {
       this.inputBox.style.display = 'block'
       this.radioButton.style.display = 'none'
+    }
+    if (data.limit) {
+      console.log('limit: ' + data.limit)
+    } else {
+      console.log('no limit')
     }
   }
 

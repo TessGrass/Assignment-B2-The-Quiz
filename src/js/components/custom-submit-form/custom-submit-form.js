@@ -62,21 +62,18 @@ customElements.define('custom-submit-form', class extends HTMLElement {
         .appendChild(template.content.cloneNode(true))
       this.submitBox = this.shadowRoot.querySelector('#submitbox')
       this.inputBox = this.shadowRoot.querySelector('#inputbox')
+      this.inputValue = ''
     }
-    /**
-     *
-     *
-     */
 
     /**
      *
      *
      */
-    connectedCallback () {
-      this.submitBox.addEventListener('click', (event) => {
-        const inputValue = this.inputBox.firstElementChild.value
-        console.log(inputValue)
-        event.preventDefault()
-      })
-    }
-  })
+  connectedCallback () {
+    this.submitBox.addEventListener('click', (event) => {
+      this.inputValue = this.inputBox.firstElementChild.value
+      console.log(this.inputValue)
+      event.preventDefault()
+    })
+  }
+})

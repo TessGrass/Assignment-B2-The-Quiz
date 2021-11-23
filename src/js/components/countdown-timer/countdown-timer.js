@@ -7,7 +7,7 @@ template.innerHTML = `
     width: 100px;
     height: 100px;
     border-radius: 50px;
-    border: solid #f61e61;
+    border: solid 1px #f61e61;
     color: white;
   }
 
@@ -40,7 +40,7 @@ customElements.define('countdown-timer', class extends HTMLElement {
       .appendChild(template.content.cloneNode(true))
     this.timerText = this.shadowRoot.querySelector('#timertext')
     this.timesUp = this.shadowRoot.querySelector('#timesup')
-    this.count = 7
+    this.count = ''
     this.timer = ''
   }
 
@@ -48,17 +48,22 @@ customElements.define('countdown-timer', class extends HTMLElement {
    * 
    */
   connectedCallback () {
-   this.timer = setInterval(() => {
-      this.count -= 1
-      this.timerText.textContent = this.count
+    addEventListener('limit', (event) => {
+      this.count = event.detail.limit
+      console.log(this.count)
+      if (!this.count) {
+        this.count = 20
+      }
+    })
+    this.timer = setInterval(() => {
+      this.timerText.textContent = this.count -= 1
       if (this.count === 0) {
         clearInterval(this.timer)
         this.timesUp.textContent = 'Times Up!'
       }
     }, 1000)
-   /*if (this.timerText.textContent === 0) {
-      console.log('38')
-      clearInterval(this.timesUp)
-    }*/
   }
 })
+
+/*
+*/
