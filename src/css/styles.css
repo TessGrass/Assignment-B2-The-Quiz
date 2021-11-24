@@ -28,7 +28,7 @@ body {
 .logoWrapper img {
   margin-left: auto;
   margin-right: auto;
-  width: 50%; 
+  max-width: 35%; 
 }
 
 .formWrapper {
@@ -37,6 +37,13 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
+}
+
+.timerWrapper {
+    margin: 10px;
+    width: 90px;
+    height: 90px;
+    position: absolute;
 }
 
 #test {

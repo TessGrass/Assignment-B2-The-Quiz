@@ -7,7 +7,7 @@ template.innerHTML = `
     width: 100px;
     height: 100px;
     border-radius: 50px;
-    border: solid 1px #f61e61;
+    border: solid 2px #f61e61;
     color: white;
   }
 
@@ -29,43 +29,62 @@ template.innerHTML = `
   <h3 id="timesup"></h3>
 </div>
 `
-customElements.define('countdown-timer', class extends HTMLElement {
+customElements.define('countdown-timer', /**
+ccccccccccccccccccccccccccccccccccccccccc *
+ccccccccccccccccccccccccccccccccccccccccc */
+  class extends HTMLElement {
+  /**
+   *
+   */
+    constructor () {
+      super()
+
+      this.attachShadow({ mode: 'open' })
+        .appendChild(template.content.cloneNode(true))
+      this.timerText = this.shadowRoot.querySelector('#timertext')
+      this.timesUp = this.shadowRoot.querySelector('#timesup')
+      this.highScore = ''
+      this.count = ''
+      this.timer = ''
+      this.timerFunction = this.timerFunction.bind(this)
+    }
+
+    /**
+     *
+     *
+     */
+    connectedCallback () {
+      addEventListener('limit', (event) => {
+        this.count = event.detail.limit
+        if (!this.count) {
+          this.count = 20
+        }
+      })
+      this.timerFunction()
+      // document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore)
+
+    /* this.dispatchEvent(new CustomEvent('timerScore', {
+      detail: { detail: this.highScore },
+      bubbles: true,
+      composed: true
+    })) */
+    }
+
     /**
      *
      */
-  constructor () {
-    super()
-
-    this.attachShadow({ mode: 'open' })
-      .appendChild(template.content.cloneNode(true))
-    this.timerText = this.shadowRoot.querySelector('#timertext')
-    this.timesUp = this.shadowRoot.querySelector('#timesup')
-    this.count = ''
-    this.timer = ''
-    
-  }
-
-  /**
-   * 
-   * 
-   */
-  connectedCallback () {
-    addEventListener('limit', (event) => {
-      this.count = event.detail.limit
-      console.log(this.count)
-      if (!this.count) {
-        this.count = 20
-      }
-    })
-    this.timer = setInterval(() => {
-      this.timerText.textContent = this.count -= 1
-      if (this.count === 0) {
-        clearInterval(this.timer)
-        this.timesUp.textContent = 'Times Up!'
-      }
-    }, 1000)
-  }
-})
+    timerFunction () {
+      this.timer = setInterval(() => {
+        this.timerText.textContent = this.count -= 1
+        this.highScore++
+        if (this.count === 0) {
+          clearInterval(this.timer)
+          document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore)
+          this.timesUp.textContent = 'Times Up!'
+        }
+      }, 1000)
+    }
+  })
 
 /*
 */
