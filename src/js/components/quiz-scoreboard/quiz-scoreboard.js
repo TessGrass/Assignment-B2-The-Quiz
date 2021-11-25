@@ -61,11 +61,21 @@ ccccccccccccccccccccccccccccccccccccccccc */
 
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
-      this.score = 0
-      this.userName = ''
-      this.name = 'scoreboard'
       this.scoreboard = this.shadowRoot.querySelector('#scoreboard')
       this.h1Tag = this.shadowRoot.querySelector('h1')
+      this.name = 'scoreboard'
+      this.score = 0
+      this.userName = ''
+
+      addEventListener('userscore', (event) => {
+        console.log('eventlyssnaren i scoreboard')
+        const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
+        const userName = localStorage.getItem('username')
+        const userScore = localStorage.getItem('userscore')
+        console.log(currentScoreboard)
+        currentScoreboard.push({ name: userName, score: userScore })
+        localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
+      })
     }
 
     /**
@@ -73,6 +83,11 @@ ccccccccccccccccccccccccccccccccccccccccc */
      */
     static get observedAttributes () {
       return ['username', 'score', 'showscoreboard']
+    }
+
+    connectedCallback () {
+      console.log('connected scoreboard')
+      console.log(this.currentScoreboard)
     }
 
     /**
@@ -91,7 +106,7 @@ ccccccccccccccccccccccccccccccccccccccccc */
       }
       if (name === 'showscoreboard') {
         this.scoreboard.style.display = 'block'
-        this.h1Tag.textContent = 'GAME OVER!'
+        this.h1Tag.textContent = 'GAME IS OVER'
       }
     }
   })

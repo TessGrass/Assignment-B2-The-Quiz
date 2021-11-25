@@ -44,7 +44,7 @@ ccccccccccccccccccccccccccccccccccccccccc */
       this.timerText = this.shadowRoot.querySelector('#timertext')
       this.timesUp = this.shadowRoot.querySelector('#timesup')
       this.timerFunction = this.timerFunction.bind(this)
-      this.highScore = ''
+      this.highScore = 0
       this.count = ''
       this.timer = ''
     }
@@ -63,33 +63,50 @@ ccccccccccccccccccccccccccccccccccccccccc */
       this.timerFunction()
     }
 
-      stopTimer() {
-        clearInterval(this.timer)
-        const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
-        // const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore')) // Ta bort, enbart för test.
-        console.log(currentScoreboard)
-        if (currentScoreboard) {
-          currentScoreboard.push({ name: 'Hans', score: this.highScore })
-          console.log(currentScoreboard)
-        } else {
-          currentScoreboard.push({ name: 'Hans', score: this.highScore })
-          console.log(currentScoreboard)
-        }
-        localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
-      }
+    /**
+     *
+     */
+    stopTimer () {
+      clearInterval(this.timer) /*
+      const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
+      const userName = localStorage.getItem('username')
+      // const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore')) // Ta bort, enbart för test.
+      console.log(currentScoreboard)
 
-      updateScoreboard() {
-        const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore'))
+      if (currentScoreboard) {
+        currentScoreboard.push({ name: userName, score: this.highScore })
         console.log(currentScoreboard)
-        if (currentScoreboard) {
-            console.log('scoreboard') // Jämföra poängen, sortera.
-        } else {
-          currentScoreboard.push({ name: 'Hans', score: this.highScore })
-        }
-        localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
-      // const currentScoreboard = JSON.parse(localStorage?.getItem('Highscore'))
-       // console.log(currentScoreboard)
+      } else {
+        currentScoreboard.push({ name: userName, score: this.highScore })
+        console.log(currentScoreboard)
       }
+      localStorage.setItem('highscore', JSON.stringify(currentScoreboard)) */
+    }
+
+    /**
+     *
+     */
+    updateScoreboard () {
+      const score = localStorage.setItem('userscore', this.highScore)
+      console.log('hej')
+      this.dispatchEvent(new CustomEvent('userscore', {
+        detail: { score: score },
+        bubbles: true,
+        composed: true
+      }))
+      /*const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
+      const userName = localStorage.getItem('username')
+      // const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore'))
+      console.log(currentScoreboard)
+      if (currentScoreboard) { // Jämföra poängen, sortera.
+        currentScoreboard.push({ name: userName, score: this.highScore })
+      } else {
+        currentScoreboard.push({ name: 'Hans', score: this.highScore })
+      }
+      localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
+      // const currentScoreboard = JSON.parse(localStorage?.getItem('Highscore'))
+      // console.log(currentScoreboard)*/
+    }
 
     /**
      *
