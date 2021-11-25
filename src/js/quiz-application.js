@@ -1,9 +1,10 @@
 const template = document.createElement('template')
 template.innerHTML = `
-<style> 
+<style>
 
 form input {
     display: block;
+    word-break: break-all;
     height: 80px:
     border: 0;
     border-radius: 13px;
@@ -34,6 +35,7 @@ form input {
 }
 
 .submit {
+  word-break: break-all;
     width: 190px;
     height: 80px;
     box-shadow: inset 0 0 5px;
@@ -41,16 +43,23 @@ form input {
 }
 
 #radiobutton {
+  word-break: break-all;
     display: none;
     text-align: center;
     color: white;
 }
 
 p {
+  word-break: break-all;
   text-align: center;
   font-family: verdana;
     color: white;
     font-size: 14px;
+}
+
+h1 {
+  color: white;
+  text-align: center;
 }
 </style>
 <div id="wrapper">
@@ -65,6 +74,8 @@ p {
     <div id="submitbox">
         <input type="Submit" value="NEXT QUESTION" class="submit">
     </div>
+</div>
+<countdown-timer />
 </div>
 </form>
 `
@@ -90,15 +101,10 @@ customElements.define('fetch-question',
       this.wrapper = this.shadowRoot.querySelector('#wrapper')
       this.fetchQuestionUrl = 'https://courselab.lnu.se/quiz/question/1'
       this.getAnswerUrl = 'https://courselab.lnu.se/quiz/answer/1'
-      this.wrapper.style.display = 'none'
+      // this.wrapper.style.display = 'none'
       this.answerContainer = ''
       this.checkLimit = ''
       this.timerScore = ''
-
-      this.addEventListener('timerScore', (event) => {
-        console.log('Ho ho ho från rad 90')
-        this.timerScore = event
-      })
     }
 
     /**
@@ -147,12 +153,13 @@ customElements.define('fetch-question',
      * @param {object} data - the retrieved data from server.
      */
     displayQuestionSetAnswer (data) {
-      this.question.textContent = data.question.toUpperCase() // Fråga visas i webbläsaren
+      this.question.textContent = data.question.toUpperCase() // Frågan visas i webbläsaren
       this.dispatchEvent(new CustomEvent('limit', {
         detail: { limit: data.limit },
         bubbles: true
       }))
-      this.getAnswerUrl = data.nextURL
+
+      this.getAnswerUrl = data.nextURL // Kollar typ av fråga, vilket alternativ som ska presentera alternativen.
       console.log(this.getAnswerUrl)
       if (data.alternatives) {
         for (const [key, value] of Object.entries(data.alternatives)) {
@@ -186,20 +193,27 @@ customElements.define('fetch-question',
      */
     async postAnswerFromUser () {
       console.log('177')
-      let receiveAnswer = await window.fetch(this.getAnswerUrl, {
+      const receiveAnswer = await window.fetch(this.getAnswerUrl, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json'
         },
         body: JSON.stringify({ answer: this.answerContainer })
       })
-      if (receiveAnswer.status === 400 || !receiveAnswer.nextURL) {
-        console.log('400 bitches')
+      const answer = await receiveAnswer.json()
+      console.log(receiveAnswer.status)
+      console.log(answer)
+      if (receiveAnswer.status === 400) {
+        console.log('205')
+        this.shadowRoot.querySelector('countdown-timer').stopTimer()
+        this.showScoreboard()
+      } else if (receiveAnswer.status === 200 && !answer.nextURL) {
+        this.shadowRoot.querySelector('countdown-timer').stopTimer()
+        this.shadowRoot.querySelector('countdown-timer').updateScoreboard()
         this.showScoreboard()
       } else {
-        receiveAnswer = await receiveAnswer.json()
-        console.log('postAnswerFromUser: ' + receiveAnswer.nextURL)
-        this.generateNextQuestionUrl(receiveAnswer)
+        console.log('postAnswerFromUser: ' + answer.nextURL)
+        this.generateNextQuestionUrl(answer)
       }
     }
 
@@ -229,18 +243,24 @@ customElements.define('fetch-question',
     }
 
     /**
-     * @param name
-     * @param oldValue
-     * @param newValue
+     * Displays the scoreboard when the player chose the wrong answer.
+     *
+     */
+    showScoreboard () {
+      this.scoreBoard = document.querySelector('quiz-scoreboard').setAttribute('showscoreboard', 0)
+      this.wrapper.style.display = 'none'
+    }
+
+    /**
+     *
+     *
+     * @param {*} name
+     * @param {*} oldValue
+     * @param {*} newValue
      */
     attributeChangedCallback (name, oldValue, newValue) {
       if (name === 'display') {
         this.wrapper.style.display = 'block'
       }
-    }
-
-    showScoreboard () {
-    this.scoreBoard = document.querySelector('quiz-scoreboard').setAttribute('showscoreboard', 0)
-    this.wrapper.style.display = 'none'
     }
   })

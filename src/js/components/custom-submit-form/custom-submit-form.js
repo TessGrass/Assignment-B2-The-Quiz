@@ -1,3 +1,5 @@
+import '../../quiz-application.js'
+
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
@@ -66,8 +68,8 @@ cccccccccccccccccccccccccccccccccccccccccccc */
       this.submitBox = this.shadowRoot.querySelector('#submitbox')
       this.inputBox = this.shadowRoot.querySelector('#inputbox')
       this.form = this.shadowRoot.querySelector('form')
-      this.userName = ''
       this.form.style.display = 'block'
+      this.userName = ''
     }
 
     /**
@@ -75,13 +77,16 @@ cccccccccccccccccccccccccccccccccccccccccccc */
      *
      */
     connectedCallback () {
+      this.inputBox.firstElementChild.value = localStorage.getItem('username')
       this.submitBox.addEventListener('click', (event) => {
+        event.preventDefault()
         this.userName = this.inputBox.firstElementChild.value
+        localStorage.setItem('username', this.userName)
+        document.querySelector('.formWrapper').appendChild(document.createElement('fetch-question'))
         document.querySelector('quiz-scoreboard').setAttribute('username', this.userName)
         console.log(this.userName)
-        document.querySelector('fetch-question').setAttribute('display', 0)
+        // document.querySelector('fetch-question').setAttribute('display', 0)
         this.form.style.display = 'none'
-        event.preventDefault()
       })
     }
   })

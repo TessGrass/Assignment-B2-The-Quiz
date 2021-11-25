@@ -43,10 +43,10 @@ ccccccccccccccccccccccccccccccccccccccccc */
         .appendChild(template.content.cloneNode(true))
       this.timerText = this.shadowRoot.querySelector('#timertext')
       this.timesUp = this.shadowRoot.querySelector('#timesup')
+      this.timerFunction = this.timerFunction.bind(this)
       this.highScore = ''
       this.count = ''
       this.timer = ''
-      this.timerFunction = this.timerFunction.bind(this)
     }
 
     /**
@@ -61,14 +61,35 @@ ccccccccccccccccccccccccccccccccccccccccc */
         }
       })
       this.timerFunction()
-      // document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore)
-
-    /* this.dispatchEvent(new CustomEvent('timerScore', {
-      detail: { detail: this.highScore },
-      bubbles: true,
-      composed: true
-    })) */
     }
+
+      stopTimer() {
+        clearInterval(this.timer)
+        const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
+        // const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore')) // Ta bort, enbart för test.
+        console.log(currentScoreboard)
+        if (currentScoreboard) {
+          currentScoreboard.push({ name: 'Hans', score: this.highScore })
+          console.log(currentScoreboard)
+        } else {
+          currentScoreboard.push({ name: 'Hans', score: this.highScore })
+          console.log(currentScoreboard)
+        }
+        localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
+      }
+
+      updateScoreboard() {
+        const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore'))
+        console.log(currentScoreboard)
+        if (currentScoreboard) {
+            console.log('scoreboard') // Jämföra poängen, sortera.
+        } else {
+          currentScoreboard.push({ name: 'Hans', score: this.highScore })
+        }
+        localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
+      // const currentScoreboard = JSON.parse(localStorage?.getItem('Highscore'))
+       // console.log(currentScoreboard)
+      }
 
     /**
      *
@@ -79,12 +100,10 @@ ccccccccccccccccccccccccccccccccccccccccc */
         this.highScore++
         if (this.count === 0) {
           clearInterval(this.timer)
+          document.querySelector('fetch-question').showScoreboard()
           document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore)
           this.timesUp.textContent = 'Times Up!'
         }
       }, 1000)
     }
   })
-
-/*
-*/

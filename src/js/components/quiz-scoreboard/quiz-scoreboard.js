@@ -18,7 +18,7 @@ template.innerHTML = `
 
   h2 {
       text-align: center;
-      font-size: 20px;
+      font-size: 16px;
   }
 
   table {
@@ -28,8 +28,14 @@ template.innerHTML = `
        margin-left: 0;
        margin-bottom: 20px;
    }
+   h1 {
+       color: white;
+       text-align: center;
+       font-size: 36px;
+   }
 
 </style>
+<h1></h1>
 <div id ="scoreboard">
     <h2>S C O R E B O A R D</h2>
 <ol>
@@ -59,6 +65,7 @@ ccccccccccccccccccccccccccccccccccccccccc */
       this.userName = ''
       this.name = 'scoreboard'
       this.scoreboard = this.shadowRoot.querySelector('#scoreboard')
+      this.h1Tag = this.shadowRoot.querySelector('h1')
     }
 
     /**
@@ -79,12 +86,12 @@ ccccccccccccccccccccccccccccccccccccccccc */
         this.userName = newValue
       }
       if (name === 'score') {
-        console.log('-------------------------------HEJ!!!!')
         this.score = newValue
         console.log(this.score + 'this is score')
       }
       if (name === 'showscoreboard') {
         this.scoreboard.style.display = 'block'
+        this.h1Tag.textContent = 'GAME OVER!'
       }
     }
   })
