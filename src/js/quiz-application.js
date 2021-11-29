@@ -79,7 +79,7 @@ h1 {
 </div>
 </form>
 `
-customElements.define('fetch-question',
+customElements.define('quiz-application',
 
   /**
    *
@@ -101,10 +101,15 @@ customElements.define('fetch-question',
       this.wrapper = this.shadowRoot.querySelector('#wrapper')
       this.fetchQuestionUrl = 'https://courselab.lnu.se/quiz/question/1'
       this.getAnswerUrl = 'https://courselab.lnu.se/quiz/answer/1'
-      // this.wrapper.style.display = 'none'
       this.answerContainer = ''
       this.checkLimit = ''
       this.timerScore = ''
+
+      this.submitBox.addEventListener('click', (event) => {
+        this.checkTypeOfAnswer()
+        this.postAnswerFromUser(this.answerContainer)
+        event.preventDefault()
+      })
     }
 
     /**
@@ -122,11 +127,6 @@ customElements.define('fetch-question',
      */
     connectedCallback () {
       this.fetchQuestion()
-      this.submitBox.addEventListener('click', (event) => {
-        this.checkTypeOfAnswer()
-        this.postAnswerFromUser(this.answerContainer)
-        event.preventDefault()
-      })
     }
 
     /**
@@ -159,7 +159,7 @@ customElements.define('fetch-question',
         bubbles: true
       }))
 
-      this.getAnswerUrl = data.nextURL // Kollar typ av fråga, vilket alternativ som ska presentera alternativen.
+      this.getAnswerUrl = data.nextURL // Kollar typ av fråga.
       console.log(this.getAnswerUrl)
       if (data.alternatives) {
         for (const [key, value] of Object.entries(data.alternatives)) {
@@ -192,7 +192,6 @@ customElements.define('fetch-question',
      *
      */
     async postAnswerFromUser () {
-      console.log('177')
       const receiveAnswer = await window.fetch(this.getAnswerUrl, {
         method: 'POST',
         headers: {
@@ -202,7 +201,6 @@ customElements.define('fetch-question',
       })
       const answer = await receiveAnswer.json()
       console.log(receiveAnswer.status)
-      console.log(answer)
       if (receiveAnswer.status === 400) {
         console.log('205')
         this.shadowRoot.querySelector('countdown-timer').stopTimer()
@@ -212,7 +210,6 @@ customElements.define('fetch-question',
         this.shadowRoot.querySelector('countdown-timer').updateScoreboard()
         this.showScoreboard()
       } else {
-        console.log('postAnswerFromUser: ' + answer.nextURL)
         this.generateNextQuestionUrl(answer)
       }
     }
@@ -252,11 +249,11 @@ customElements.define('fetch-question',
     }
 
     /**
+     * Switch wrapper to style display block when the attribute name === 'display'.
      *
-     *
-     * @param {*} name
-     * @param {*} oldValue
-     * @param {*} newValue
+     * @param {string} name - attribute.
+     * @param {string} oldValue - oldValue.
+     * @param {string} newValue - newValue.
      */
     attributeChangedCallback (name, oldValue, newValue) {
       if (name === 'display') {

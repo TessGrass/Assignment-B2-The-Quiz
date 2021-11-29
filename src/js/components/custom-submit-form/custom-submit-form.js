@@ -82,7 +82,7 @@ cccccccccccccccccccccccccccccccccccccccccccc */
         event.preventDefault()
         this.userName = this.inputBox.firstElementChild.value
         localStorage.setItem('username', this.userName)
-        document.querySelector('.formWrapper').appendChild(document.createElement('fetch-question'))
+        document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application'))
         document.querySelector('quiz-scoreboard').setAttribute('username', this.userName)
         console.log(this.userName)
         // document.querySelector('fetch-question').setAttribute('display', 0)

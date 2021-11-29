@@ -35,6 +35,7 @@ ccccccccccccccccccccccccccccccccccccccccc */
   class extends HTMLElement {
   /**
    *
+   *
    */
     constructor () {
       super()
@@ -47,23 +48,25 @@ ccccccccccccccccccccccccccccccccccccccccc */
       this.highScore = 0
       this.count = ''
       this.timer = ''
-    }
 
-    /**
-     *
-     *
-     */
-    connectedCallback () {
       addEventListener('limit', (event) => {
         this.count = event.detail.limit
         if (!this.count) {
           this.count = 20
         }
       })
+    }
+
+    /**
+     * Calling this.timerFunction.
+     *
+     */
+    connectedCallback () {
       this.timerFunction()
     }
 
     /**
+     * Terminates the time.
      *
      */
     stopTimer () {
@@ -84,17 +87,18 @@ ccccccccccccccccccccccccccccccccccccccccc */
     }
 
     /**
-     *
+     * Sets userscore to localStorage. Dispatch a custom event with the score.
      */
     updateScoreboard () {
+      console.log('TIMER:update Scoreboard')
       const score = localStorage.setItem('userscore', this.highScore)
-      console.log('hej')
       this.dispatchEvent(new CustomEvent('userscore', {
         detail: { score: score },
         bubbles: true,
         composed: true
       }))
-      /*const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
+
+      /* const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
       const userName = localStorage.getItem('username')
       // const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore'))
       console.log(currentScoreboard)
@@ -105,19 +109,20 @@ ccccccccccccccccccccccccccccccccccccccccc */
       }
       localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
       // const currentScoreboard = JSON.parse(localStorage?.getItem('Highscore'))
-      // console.log(currentScoreboard)*/
+      // console.log(currentScoreboard) */
     }
 
     /**
-     *
+     * Starts the timer. When the timer reaches zero, quiz-scoreboard attribute sets to this.highscore.
      */
     timerFunction () {
+      console.log('TIMER:timerfunction')
       this.timer = setInterval(() => {
         this.timerText.textContent = this.count -= 1
         this.highScore++
         if (this.count === 0) {
           clearInterval(this.timer)
-          document.querySelector('fetch-question').showScoreboard()
+          document.querySelector('quiz-application').showScoreboard()
           document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore)
           this.timesUp.textContent = 'Times Up!'
         }

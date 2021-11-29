@@ -39,19 +39,16 @@ template.innerHTML = `
 <div id ="scoreboard">
     <h2>S C O R E B O A R D</h2>
 <ol>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
 </ol>
 </div>
 
 `
 
-customElements.define('quiz-scoreboard', /**
-ccccccccccccccccccccccccccccccccccccccccc *
-ccccccccccccccccccccccccccccccccccccccccc */
+customElements.define('quiz-scoreboard',
+
+  /**
+   *
+   */
   class extends HTMLElement {
     /**
      *
@@ -63,6 +60,7 @@ ccccccccccccccccccccccccccccccccccccccccc */
         .appendChild(template.content.cloneNode(true))
       this.scoreboard = this.shadowRoot.querySelector('#scoreboard')
       this.h1Tag = this.shadowRoot.querySelector('h1')
+      this.sortedList = this.shadowRoot.querySelector('ol')
       this.name = 'scoreboard'
       this.score = 0
       this.userName = ''
@@ -72,28 +70,34 @@ ccccccccccccccccccccccccccccccccccccccccc */
         const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
         const userName = localStorage.getItem('username')
         const userScore = localStorage.getItem('userscore')
-        console.log(currentScoreboard)
         currentScoreboard.push({ name: userName, score: userScore })
         localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
+        currentScoreboard.sort((a, b) => a.score - b.score)
+        currentScoreboard.splice(5)
+        console.log(currentScoreboard)
+        for (const key of Object.values(currentScoreboard)) {
+          const listEl = document.createElement('li')
+          listEl.innerText = `${key.name} : ${key.score}`
+          this.sortedList.appendChild(listEl)
+        }
       })
     }
 
     /**
+     * The observed attributes.
      *
+     * @returns - the observed attributes.
      */
     static get observedAttributes () {
       return ['username', 'score', 'showscoreboard']
     }
 
-    connectedCallback () {
-      console.log('connected scoreboard')
-      console.log(this.currentScoreboard)
-    }
-
     /**
-     * @param name
-     * @param oldValue
-     * @param newValue
+     * Executes code depended of which name equals attribute.
+     *
+     * @param name - attribute.
+     * @param oldValue - oldValue.
+     * @param newValue - newValue.
      */
     attributeChangedCallback (name, oldValue, newValue) {
       if (name === 'username') {
@@ -106,7 +110,7 @@ ccccccccccccccccccccccccccccccccccccccccc */
       }
       if (name === 'showscoreboard') {
         this.scoreboard.style.display = 'block'
-        this.h1Tag.textContent = 'GAME IS OVER'
+        this.h1Tag.textContent = 'GAME OVER'
       }
     }
   })
