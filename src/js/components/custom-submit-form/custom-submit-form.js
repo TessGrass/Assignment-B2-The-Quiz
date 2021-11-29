@@ -48,18 +48,14 @@ form input {
     </div>
 </form>
 `
-/**
- *
- *
- */
 
-customElements.define('custom-submit-form', /**
-cccccccccccccccccccccccccccccccccccccccccccc *
-cccccccccccccccccccccccccccccccccccccccccccc */
-  class extends HTMLElement {
-  /**
-   *
-   */
+customElements.define('custom-submit-form',
+
+class extends HTMLElement {
+    /**
+    *  Creates an instance of the current type.
+    *
+    */
     constructor () {
       super()
 
@@ -85,7 +81,6 @@ cccccccccccccccccccccccccccccccccccccccccccc */
         document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application'))
         document.querySelector('quiz-scoreboard').setAttribute('username', this.userName)
         console.log(this.userName)
-        // document.querySelector('fetch-question').setAttribute('display', 0)
         this.form.style.display = 'none'
       })
     }

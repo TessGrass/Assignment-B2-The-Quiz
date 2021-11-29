@@ -86,7 +86,7 @@ customElements.define('quiz-application',
    */
   class extends HTMLElement {
     /**
-     * The quiz application.
+     * Creates a instance of the current type.
      *
      */
     constructor () {
@@ -113,9 +113,9 @@ customElements.define('quiz-application',
     }
 
     /**
-     * Observing display attribute.
+     * Observing the attribute display.
      *
-     * @returns display.
+     * @returns {string} display.
      */
     static get observedAttributes () {
       return ['display']
@@ -159,7 +159,7 @@ customElements.define('quiz-application',
         bubbles: true
       }))
 
-      this.getAnswerUrl = data.nextURL // Kollar typ av fråga.
+      this.getAnswerUrl = data.nextURL
       console.log(this.getAnswerUrl)
       if (data.alternatives) {
         for (const [key, value] of Object.entries(data.alternatives)) {

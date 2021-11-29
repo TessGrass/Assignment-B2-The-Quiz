@@ -34,7 +34,7 @@ ccccccccccccccccccccccccccccccccccccccccc *
 ccccccccccccccccccccccccccccccccccccccccc */
   class extends HTMLElement {
   /**
-   *
+   * Creates a instance of the current type.
    *
    */
     constructor () {

@@ -41,9 +41,7 @@ template.innerHTML = `
 <ol>
 </ol>
 </div>
-
 `
-
 customElements.define('quiz-scoreboard',
 
   /**
@@ -51,7 +49,7 @@ customElements.define('quiz-scoreboard',
    */
   class extends HTMLElement {
     /**
-     *
+     * Creates a instance of the current type.
      */
     constructor () {
       super()
@@ -86,7 +84,7 @@ customElements.define('quiz-scoreboard',
     /**
      * The observed attributes.
      *
-     * @returns - the observed attributes.
+     * @returns {string} - the observed attributes.
      */
     static get observedAttributes () {
       return ['username', 'score', 'showscoreboard']
@@ -95,9 +93,9 @@ customElements.define('quiz-scoreboard',
     /**
      * Executes code depended of which name equals attribute.
      *
-     * @param name - attribute.
-     * @param oldValue - oldValue.
-     * @param newValue - newValue.
+     * @param {string} name - attribute.
+     * @param {string} oldValue - oldValue.
+     * @param {string} newValue - newValue.
      */
     attributeChangedCallback (name, oldValue, newValue) {
       if (name === 'username') {
