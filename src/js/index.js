@@ -13,4 +13,5 @@ import './components/countdown-timer/'
 const formWrapper = document.querySelector('.formWrapper')
 const customSubmitForm = document.createElement('custom-submit-form')
 const scoreboard = document.createElement('quiz-scoreboard')
+const quizApplication = document.createElement('quiz-application')
 formWrapper.append(customSubmitForm, scoreboard)

@@ -50,12 +50,13 @@ form input {
 `
 
 customElements.define('custom-submit-form',
-
-class extends HTMLElement {
+  /**
+   * Creates a instance of the current type.
+   */
+  class extends HTMLElement {
     /**
-    *  Creates an instance of the current type.
-    *
-    */
+     * Creates a instance of the current type.
+     */
     constructor () {
       super()
 
@@ -71,17 +72,17 @@ class extends HTMLElement {
         event.preventDefault()
         this.userName = this.inputBox.firstElementChild.value
         localStorage.setItem('username', this.userName)
-        document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application'))
-        document.querySelector('quiz-scoreboard').setAttribute('username', this.userName)
+
+        document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application')) // KODA OM?!
+        // document.querySelector('quiz-scoreboard').setAttribute('username', this.userName) // ta bort, lyssnar ej längre på attributet??
         this.form.style.display = 'none'
       })
     }
 
     /**
      * Assigning the input value to variable.
-     *
      */
     connectedCallback () {
-      this.inputBox.firstElementChild.value = localStorage.getItem('username')
+      this.inputBox.firstElementChild.value = localStorage.getItem('username') // Ta bort? Ska namnet vara ifyllt vid nästa omgång?
     }
   })

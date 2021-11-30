@@ -42,7 +42,7 @@ template.innerHTML = `
        margin-top: 10px;
        display: flex;
        display: none;
-       color: red;
+       color: black;
        width: 120px;
        height: 60px;
    }
@@ -54,7 +54,7 @@ template.innerHTML = `
 <ol></ol>
 </div>
 <form>
-     <input type="Submit" value="PLAY AGAIN!" class="submit">
+     <input type="submit" value="PLAY AGAIN!" class="submit">
 </form>
 `
 customElements.define('quiz-scoreboard',
@@ -75,11 +75,11 @@ customElements.define('quiz-scoreboard',
       this.h1Tag = this.shadowRoot.querySelector('h1')
       this.olEl = this.shadowRoot.querySelector('ol')
       this.restartGame = this.shadowRoot.querySelector('.submit')
-      this.name = 'scoreboard'
-      this.score = 0
+      // this.name = 'scoreboard'
+      // this.score = 0
       // this.userName = ''
 
-      addEventListener('userscore', (event) => {
+      addEventListener('userscore', (event) => { //om användaren klarar spelet och får poäng.
         this.olEl.textContent = ''
         const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
         const userName = localStorage.getItem('username')
@@ -97,11 +97,12 @@ customElements.define('quiz-scoreboard',
      * Displays the scoreboard for the player.
      *
      */
-    displayScoreboard () {
+    displayScoreboard () { // För att visa scoreboarden, oavsett om spelaren klarar spelet eller inte.
       this.olEl.textContent = ''
       const displayHighscore = JSON.parse(localStorage.getItem('highscore'))
       displayHighscore.sort((a, b) => a.score - b.score)
       displayHighscore.splice(5)
+
       for (const key of Object.values(displayHighscore)) {
         const listEl = document.createElement('li')
         listEl.innerText = `${key.name} : ${key.score}`
@@ -126,14 +127,6 @@ customElements.define('quiz-scoreboard',
      * @param {string} newValue - newValue.
      */
     attributeChangedCallback (name, oldValue, newValue) {
-      /*if (name === 'username') {
-        console.log('this is username ' + newValue)
-        this.userName = newValue
-      }
-      if (name === 'score') {
-        this.score = newValue
-        console.log(this.score + 'this is score')
-      }*/
       if (name === 'showscoreboard') {
         this.scoreboard.style.display = 'block'
         this.restartGame.style.display = 'block'
@@ -142,3 +135,16 @@ customElements.define('quiz-scoreboard',
       }
     }
   })
+
+
+
+
+  
+  /*if (name === 'username') {
+        console.log('this is username ' + newValue)
+        this.userName = newValue
+      }
+      if (name === 'score') {
+        this.score = newValue
+        console.log(this.score + 'this is score')
+      }*/

@@ -2,8 +2,10 @@ const template = document.createElement('template')
 template.innerHTML = `
 <style>
 
+div {
+  
+}
 form input {
-    display: block;
     word-break: break-all;
     height: 80px:
     border: 0;
@@ -82,12 +84,11 @@ h1 {
 customElements.define('quiz-application',
 
   /**
-   *
+   * Represents the quiz-application.
    */
   class extends HTMLElement {
     /**
      * Creates a instance of the current type.
-     *
      */
     constructor () {
       super()
@@ -124,7 +125,6 @@ customElements.define('quiz-application',
 
     /**
      * Fetching the question, post answer from user.
-     *
      */
     connectedCallback () {
       this.fetchQuestion()
@@ -132,7 +132,6 @@ customElements.define('quiz-application',
 
     /**
      * Fetching question from server.
-     *
      */
     async fetchQuestion () {
       console.log(this.fetchQuestionUrl + ' fetchQuestion')
@@ -145,7 +144,7 @@ customElements.define('quiz-application',
       })
       fetchQuestion = await fetchQuestion.json()
       console.log(fetchQuestion)
-      this.displayQuestionSetAnswer(fetchQuestion)
+      this.displayQuestionInBrowser(fetchQuestion)
     }
 
     /**
@@ -153,7 +152,7 @@ customElements.define('quiz-application',
      *
      * @param {object} data - the retrieved data from server.
      */
-    displayQuestionSetAnswer (data) {
+    displayQuestionInBrowser (data) {
       this.question.textContent = data.question.toUpperCase() // Frågan visas i webbläsaren
       this.dispatchEvent(new CustomEvent('limit', {
         detail: { limit: data.limit },
@@ -181,11 +180,11 @@ customElements.define('quiz-application',
         this.inputBox.style.display = 'block'
         this.radioButton.style.display = 'none'
       }
-      if (data.limit) {
+      /*if (data.limit) {
         console.log('limit: ' + data.limit)
       } else {
         console.log('no limit')
-      }
+      }*/
     }
 
     /**
@@ -204,12 +203,12 @@ customElements.define('quiz-application',
       console.log(receiveAnswer.status)
       if (receiveAnswer.status === 400) {
         this.countdownTimer.style.display = 'none'
-        this.shadowRoot.querySelector('countdown-timer').stopTimer()
+        this.countdownTimer.stopTimer()
         this.showScoreboard()
       } else if (receiveAnswer.status === 200 && !answer.nextURL) {
         this.countdownTimer.style.display = 'none'
-        this.shadowRoot.querySelector('countdown-timer').stopTimer()
-        this.shadowRoot.querySelector('countdown-timer').updateScoreboard()
+        this.countdownTimer.stopTimer()
+        this.countdownTimer.updateScoreboard()
         this.showScoreboard()
       } else {
         this.generateNextQuestionUrl(answer)
@@ -246,7 +245,7 @@ customElements.define('quiz-application',
      *
      */
     showScoreboard () {
-      this.scoreBoard = document.querySelector('quiz-scoreboard').setAttribute('showscoreboard', 0)
+      this.scoreBoard = document.querySelector('quiz-scoreboard').setAttribute('showscoreboard', 0) // KODA OM?!
       this.wrapper.style.display = 'none'
     }
 

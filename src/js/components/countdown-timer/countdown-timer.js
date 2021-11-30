@@ -2,6 +2,7 @@ const template = document.createElement('template')
 template.innerHTML = `
 <style>
   div {
+    margin-bottom: 0px;
     font-family: helvetica;
     background-color: black;
     width: 100px;
@@ -23,26 +24,31 @@ template.innerHTML = `
     text-align: center;
     font-size: 16px;
   }
+
+  #scoreboard {
+    display: none;
+  }
+
 </style>
 <div id="timerwrapper">
   <h2 id="timertext"></h2>
   <h3 id="timesup"></h3>
 </div>
 `
-customElements.define('countdown-timer', /**
-ccccccccccccccccccccccccccccccccccccccccc *
-ccccccccccccccccccccccccccccccccccccccccc */
+customElements.define('countdown-timer',
+  /**
+   * Terminates the time.
+   */
   class extends HTMLElement {
   /**
    * Creates a instance of the current type.
-   *
    */
     constructor () {
       super()
 
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
-       this.timerWrapper = this.shadowRoot.querySelector('#timerwrapper')
+      this.timerWrapper = this.shadowRoot.querySelector('#timerwrapper')
       this.timerText = this.shadowRoot.querySelector('#timertext')
       this.timesUp = this.shadowRoot.querySelector('#timesup')
       this.timerFunction = this.timerFunction.bind(this)
@@ -60,7 +66,6 @@ ccccccccccccccccccccccccccccccccccccccccc */
 
     /**
      * Calling this.timerFunction.
-     *
      */
     connectedCallback () {
       this.timerFunction()
@@ -68,7 +73,6 @@ ccccccccccccccccccccccccccccccccccccccccc */
 
     /**
      * Terminates the time.
-     *
      */
     stopTimer () {
       clearInterval(this.timer)
@@ -90,17 +94,19 @@ ccccccccccccccccccccccccccccccccccccccccc */
      * Starts the timer. When the timer reaches zero, quiz-scoreboard attribute sets to this.highscore.
      */
     timerFunction () {
-      this.timer = setInterval(() => {
-        this.timerText.textContent = this.count -= 1
-        this.highScore++
+      this.timer = setTimeout(() => {
         if (this.count === 0) {
-          clearInterval(this.timer)
-          // this.timerText.textContent = 0
+          clearTimeout(this.timer)
           this.timerWrapper.style.display = 'none'
-          document.querySelector('quiz-application').showScoreboard()
-          document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore)
+          document.querySelector('quiz-application').showScoreboard() // KODA OM?! Custom Event?
+          // document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore) // Ta bort??
           this.timesUp.textContent = 'Times Up!'
+          return
         }
+        console.log(this.count)
+        this.timerText.textContent = this.count--
+        this.highScore++
+        this.timerFunction()
       }, 1000)
     }
   })
