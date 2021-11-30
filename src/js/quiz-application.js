@@ -99,16 +99,17 @@ customElements.define('quiz-application',
       this.inputBox = this.shadowRoot.querySelector('#inputbox')
       this.radioButton = this.shadowRoot.querySelector('#radiobutton')
       this.wrapper = this.shadowRoot.querySelector('#wrapper')
+      this.countdownTimer = this.shadowRoot.querySelector('countdown-timer')
       this.fetchQuestionUrl = 'https://courselab.lnu.se/quiz/question/1'
       this.getAnswerUrl = 'https://courselab.lnu.se/quiz/answer/1'
       this.answerContainer = ''
-      this.checkLimit = ''
-      this.timerScore = ''
+      // this.checkLimit = ''
+      // this.timerScore = ''
 
       this.submitBox.addEventListener('click', (event) => {
+        event.preventDefault()
         this.checkTypeOfAnswer()
         this.postAnswerFromUser(this.answerContainer)
-        event.preventDefault()
       })
     }
 
@@ -202,10 +203,11 @@ customElements.define('quiz-application',
       const answer = await receiveAnswer.json()
       console.log(receiveAnswer.status)
       if (receiveAnswer.status === 400) {
-        console.log('205')
+        this.countdownTimer.style.display = 'none'
         this.shadowRoot.querySelector('countdown-timer').stopTimer()
         this.showScoreboard()
       } else if (receiveAnswer.status === 200 && !answer.nextURL) {
+        this.countdownTimer.style.display = 'none'
         this.shadowRoot.querySelector('countdown-timer').stopTimer()
         this.shadowRoot.querySelector('countdown-timer').updateScoreboard()
         this.showScoreboard()

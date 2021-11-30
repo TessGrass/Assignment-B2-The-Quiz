@@ -1,6 +1,7 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
+
   div {
       display: none;
       box-sizing: border-box;
@@ -24,23 +25,37 @@ template.innerHTML = `
   table {
       width: 100%;
   }
+
    ol li {
        margin-left: 0;
        margin-bottom: 20px;
    }
+
    h1 {
        color: white;
        text-align: center;
        font-size: 36px;
    }
 
+   .submit {
+       border-radius: 13px;
+       margin-top: 10px;
+       display: flex;
+       display: none;
+       color: red;
+       width: 120px;
+       height: 60px;
+   }
+
 </style>
 <h1></h1>
 <div id ="scoreboard">
     <h2>S C O R E B O A R D</h2>
-<ol>
-</ol>
+<ol></ol>
 </div>
+<form>
+     <input type="Submit" value="PLAY AGAIN!" class="submit">
+</form>
 `
 customElements.define('quiz-scoreboard',
 
@@ -58,27 +73,40 @@ customElements.define('quiz-scoreboard',
         .appendChild(template.content.cloneNode(true))
       this.scoreboard = this.shadowRoot.querySelector('#scoreboard')
       this.h1Tag = this.shadowRoot.querySelector('h1')
-      this.sortedList = this.shadowRoot.querySelector('ol')
+      this.olEl = this.shadowRoot.querySelector('ol')
+      this.restartGame = this.shadowRoot.querySelector('.submit')
       this.name = 'scoreboard'
       this.score = 0
-      this.userName = ''
+      // this.userName = ''
 
       addEventListener('userscore', (event) => {
-        console.log('eventlyssnaren i scoreboard')
+        this.olEl.textContent = ''
         const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
         const userName = localStorage.getItem('username')
         const userScore = localStorage.getItem('userscore')
         currentScoreboard.push({ name: userName, score: userScore })
         localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
-        currentScoreboard.sort((a, b) => a.score - b.score)
-        currentScoreboard.splice(5)
-        console.log(currentScoreboard)
-        for (const key of Object.values(currentScoreboard)) {
-          const listEl = document.createElement('li')
-          listEl.innerText = `${key.name} : ${key.score}`
-          this.sortedList.appendChild(listEl)
-        }
+        this.displayScoreboard()
       })
+
+      this.restartGame.addEventListener('click', (event) => {
+      })
+    }
+
+    /**
+     * Displays the scoreboard for the player.
+     *
+     */
+    displayScoreboard () {
+      this.olEl.textContent = ''
+      const displayHighscore = JSON.parse(localStorage.getItem('highscore'))
+      displayHighscore.sort((a, b) => a.score - b.score)
+      displayHighscore.splice(5)
+      for (const key of Object.values(displayHighscore)) {
+        const listEl = document.createElement('li')
+        listEl.innerText = `${key.name} : ${key.score}`
+        this.olEl.appendChild(listEl)
+      }
     }
 
     /**
@@ -87,7 +115,7 @@ customElements.define('quiz-scoreboard',
      * @returns {string} - the observed attributes.
      */
     static get observedAttributes () {
-      return ['username', 'score', 'showscoreboard']
+      return ['username', 'score', 'showscoreboard'] // Ta bort två attribut?
     }
 
     /**
@@ -98,17 +126,19 @@ customElements.define('quiz-scoreboard',
      * @param {string} newValue - newValue.
      */
     attributeChangedCallback (name, oldValue, newValue) {
-      if (name === 'username') {
+      /*if (name === 'username') {
         console.log('this is username ' + newValue)
         this.userName = newValue
       }
       if (name === 'score') {
         this.score = newValue
         console.log(this.score + 'this is score')
-      }
+      }*/
       if (name === 'showscoreboard') {
         this.scoreboard.style.display = 'block'
-        this.h1Tag.textContent = 'GAME OVER'
+        this.restartGame.style.display = 'block'
+        this.h1Tag.textContent = 'GAME OVER!'
+        this.displayScoreboard()
       }
     }
   })

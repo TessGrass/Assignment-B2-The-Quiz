@@ -24,7 +24,7 @@ template.innerHTML = `
     font-size: 16px;
   }
 </style>
-<div id="timer">
+<div id="timerwrapper">
   <h2 id="timertext"></h2>
   <h3 id="timesup"></h3>
 </div>
@@ -42,6 +42,7 @@ ccccccccccccccccccccccccccccccccccccccccc */
 
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
+       this.timerWrapper = this.shadowRoot.querySelector('#timerwrapper')
       this.timerText = this.shadowRoot.querySelector('#timertext')
       this.timesUp = this.shadowRoot.querySelector('#timesup')
       this.timerFunction = this.timerFunction.bind(this)
@@ -70,58 +71,32 @@ ccccccccccccccccccccccccccccccccccccccccc */
      *
      */
     stopTimer () {
-      clearInterval(this.timer) /*
-      const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
-      const userName = localStorage.getItem('username')
-      // const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore')) // Ta bort, enbart för test.
-      console.log(currentScoreboard)
-
-      if (currentScoreboard) {
-        currentScoreboard.push({ name: userName, score: this.highScore })
-        console.log(currentScoreboard)
-      } else {
-        currentScoreboard.push({ name: userName, score: this.highScore })
-        console.log(currentScoreboard)
-      }
-      localStorage.setItem('highscore', JSON.stringify(currentScoreboard)) */
+      clearInterval(this.timer)
     }
 
     /**
      * Sets userscore to localStorage. Dispatch a custom event with the score.
      */
     updateScoreboard () {
-      console.log('TIMER:update Scoreboard')
       const score = localStorage.setItem('userscore', this.highScore)
       this.dispatchEvent(new CustomEvent('userscore', {
         detail: { score: score },
         bubbles: true,
         composed: true
       }))
-
-      /* const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
-      const userName = localStorage.getItem('username')
-      // const currentScoreboard = localStorage.getItem('highscore') && JSON.parse(localStorage.getItem('highscore'))
-      console.log(currentScoreboard)
-      if (currentScoreboard) { // Jämföra poängen, sortera.
-        currentScoreboard.push({ name: userName, score: this.highScore })
-      } else {
-        currentScoreboard.push({ name: 'Hans', score: this.highScore })
-      }
-      localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
-      // const currentScoreboard = JSON.parse(localStorage?.getItem('Highscore'))
-      // console.log(currentScoreboard) */
     }
 
     /**
      * Starts the timer. When the timer reaches zero, quiz-scoreboard attribute sets to this.highscore.
      */
     timerFunction () {
-      console.log('TIMER:timerfunction')
       this.timer = setInterval(() => {
         this.timerText.textContent = this.count -= 1
         this.highScore++
         if (this.count === 0) {
           clearInterval(this.timer)
+          // this.timerText.textContent = 0
+          this.timerWrapper.style.display = 'none'
           document.querySelector('quiz-application').showScoreboard()
           document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore)
           this.timesUp.textContent = 'Times Up!'

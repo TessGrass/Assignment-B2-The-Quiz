@@ -44,7 +44,7 @@ form input {
         <input type="text" placeholder="YOUR AWESOME NAME!" class="name">
     </div>
     <div id="submitbox">
-        <input type="Submit" value="START GAME" class="submit">
+        <input type="submit" value="START GAME" class="submit">
     </div>
 </form>
 `
@@ -66,6 +66,15 @@ class extends HTMLElement {
       this.form = this.shadowRoot.querySelector('form')
       this.form.style.display = 'block'
       this.userName = ''
+
+      this.submitBox.addEventListener('click', (event) => {
+        event.preventDefault()
+        this.userName = this.inputBox.firstElementChild.value
+        localStorage.setItem('username', this.userName)
+        document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application'))
+        document.querySelector('quiz-scoreboard').setAttribute('username', this.userName)
+        this.form.style.display = 'none'
+      })
     }
 
     /**
@@ -74,14 +83,5 @@ class extends HTMLElement {
      */
     connectedCallback () {
       this.inputBox.firstElementChild.value = localStorage.getItem('username')
-      this.submitBox.addEventListener('click', (event) => {
-        event.preventDefault()
-        this.userName = this.inputBox.firstElementChild.value
-        localStorage.setItem('username', this.userName)
-        document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application'))
-        document.querySelector('quiz-scoreboard').setAttribute('username', this.userName)
-        console.log(this.userName)
-        this.form.style.display = 'none'
-      })
     }
   })
