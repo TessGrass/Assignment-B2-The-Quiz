@@ -88,7 +88,7 @@ customElements.define('quiz-scoreboard',
       // this.score = 0
       // this.userName = ''
 
-      addEventListener('userscore', (event) => { //om användaren klarar spelet och får poäng.
+      addEventListener('userscore', (event) => { // om användaren klarar spelet och får poäng.
         this.olEl.textContent = ''
         const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
         const userName = localStorage.getItem('username')
@@ -98,7 +98,10 @@ customElements.define('quiz-scoreboard',
         this.displayScoreboard()
       })
 
-      addEventListener('displayscoreboard', (event) => {
+      addEventListener('displayscoreboard', (event) => {  //CustomEvent in timer
+        this.scoreboard.style.display = 'block'
+        this.restartGame.style.display = 'block'
+        this.h1Tag.textContent = 'GAME OVER!'
         this.displayScoreboard()
       })
 
@@ -128,7 +131,7 @@ customElements.define('quiz-scoreboard',
      *
      * @returns {string} - the observed attributes.
      */
-    static get observedAttributes () {
+    /*static get observedAttributes () {
       return ['username', 'score', 'showscoreboard'] // Ta bort två attribut?
     }
 
@@ -139,12 +142,12 @@ customElements.define('quiz-scoreboard',
      * @param {string} oldValue - oldValue.
      * @param {string} newValue - newValue.
      */
-    attributeChangedCallback (name, oldValue, newValue) {
+    /*attributeChangedCallback (name, oldValue, newValue) {
       if (name === 'showscoreboard') {
         this.scoreboard.style.display = 'block'
         this.restartGame.style.display = 'block'
         this.h1Tag.textContent = 'GAME OVER!'
         this.displayScoreboard()
       }
-    }
+    }*/
   })

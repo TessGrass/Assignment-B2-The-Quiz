@@ -112,6 +112,10 @@ customElements.define('quiz-application',
         this.checkTypeOfAnswer()
         this.postAnswerFromUser(this.answerContainer)
       })
+
+      addEventListener('hidequizapp', (event) => { // From a customEvent in timer
+        this.wrapper.style.display = 'none'
+      })
     }
 
     /**
@@ -198,13 +202,21 @@ customElements.define('quiz-application',
       console.log(receiveAnswer.status)
       if (receiveAnswer.status === 400) {
         this.countdownTimer.style.display = 'none'
+        this.wrapper.style.display = 'none'
         this.countdownTimer.stopTimer()
-        this.showScoreboard()
+        this.dispatchEvent(new CustomEvent('displayscoreboard', {
+          bubbles: true,
+          composed: true
+        }))
       } else if (receiveAnswer.status === 200 && !answer.nextURL) {
         this.countdownTimer.style.display = 'none'
+        this.wrapper.style.display = 'none'
         this.countdownTimer.stopTimer()
         this.countdownTimer.updateScoreboard()
-        this.showScoreboard()
+        this.dispatchEvent(new CustomEvent('displayscoreboard', {
+          bubbles: true,
+          composed: true
+        }))
       } else {
         this.generateNextQuestionUrl(answer)
       }
@@ -239,10 +251,10 @@ customElements.define('quiz-application',
      * Displays the scoreboard when the player chose the wrong answer.
      *
      */
-    showScoreboard () {
+    /*showScoreboard () {
       this.scoreBoard = document.querySelector('quiz-scoreboard').setAttribute('showscoreboard', 0) // KODA OM?!
       this.wrapper.style.display = 'none'
-    }
+    }*/
 
     /**
      * Switch wrapper to style display block when the attribute name === 'display'.
