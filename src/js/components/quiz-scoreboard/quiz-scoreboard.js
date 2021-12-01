@@ -98,6 +98,10 @@ customElements.define('quiz-scoreboard',
         this.displayScoreboard()
       })
 
+      addEventListener('displayscoreboard', (event) => {
+        this.displayScoreboard()
+      })
+
       this.restartGame.addEventListener('click', (event) => {
       })
     }
@@ -144,16 +148,3 @@ customElements.define('quiz-scoreboard',
       }
     }
   })
-
-
-
-
-  
-  /*if (name === 'username') {
-        console.log('this is username ' + newValue)
-        this.userName = newValue
-      }
-      if (name === 'score') {
-        this.score = newValue
-        console.log(this.score + 'this is score')
-      }*/

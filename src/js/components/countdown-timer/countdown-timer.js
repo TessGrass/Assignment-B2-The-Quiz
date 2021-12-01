@@ -93,11 +93,11 @@ customElements.define('countdown-timer',
         if (this.count === 0) {
           clearTimeout(this.timer)
           this.timerWrapper.style.display = 'none'
-          document.querySelector('quiz-application').showScoreboard() // KODA OM?! Custom Event?
-          // document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore) // Ta bort??
-          this.timesUp.textContent = 'Times Up!'
+          document.querySelector('quiz-application').showScoreboard()
           return
         }
+           // KODA OM?! Custom Event?
+          // document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore) // Ta bort?? */
         console.log(this.count)
         this.timerText.textContent = this.count--
         this.highScore++

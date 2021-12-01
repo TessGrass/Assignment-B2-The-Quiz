@@ -180,11 +180,6 @@ customElements.define('quiz-application',
         this.inputBox.style.display = 'block'
         this.radioButton.style.display = 'none'
       }
-      /*if (data.limit) {
-        console.log('limit: ' + data.limit)
-      } else {
-        console.log('no limit')
-      }*/
     }
 
     /**
