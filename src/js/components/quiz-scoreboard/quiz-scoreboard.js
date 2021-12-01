@@ -38,13 +38,22 @@ template.innerHTML = `
    }
 
    .submit {
+       margin-left: 65px;
        border-radius: 13px;
        margin-top: 10px;
        display: flex;
        display: none;
        color: black;
-       width: 120px;
-       height: 60px;
+       width: 100px;
+       height: 50px;
+       color: #f61e61;
+       background: black;
+   }
+
+   .submit:hover {
+    color: black;
+       background: #f61e61;
+
    }
 
 </style>

@@ -2,28 +2,24 @@ const template = document.createElement('template')
 template.innerHTML = `
 <style>
   div {
+    margin-left: 85px;
     margin-bottom: 0px;
     font-family: helvetica;
     background-color: black;
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     border-radius: 50px;
     border: solid 2px #f61e61;
     color: white;
   }
 
   h2 {
-    padding-top: 15px;
+    padding-top: 12px;
     text-align: center;
-    font-size: 35px;
+    font-size: 40px;
     margin: 0;
   }
 
-  h3 {
-    margin: 0;
-    text-align: center;
-    font-size: 16px;
-  }
 
   #scoreboard {
     display: none;
@@ -32,7 +28,6 @@ template.innerHTML = `
 </style>
 <div id="timerwrapper">
   <h2 id="timertext"></h2>
-  <h3 id="timesup"></h3>
 </div>
 `
 customElements.define('countdown-timer',
