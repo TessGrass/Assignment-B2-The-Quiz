@@ -96,6 +96,7 @@ customElements.define('countdown-timer',
           document.querySelector('quiz-application').showScoreboard()
           return
         }
+
            // KODA OM?! Custom Event?
           // document.querySelector('quiz-scoreboard').setAttribute('score', this.highScore) // Ta bort?? */
         console.log(this.count)
