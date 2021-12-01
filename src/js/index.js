@@ -7,7 +7,7 @@
 
 import './components/custom-submit-form/'
 import './components/quiz-scoreboard/'
-import './quiz-application.js'
+import './components/quiz-application/'
 import './components/countdown-timer/'
 
 const formWrapper = document.querySelector('.formWrapper')

@@ -1,4 +1,4 @@
-import '../../quiz-application.js'
+import '../quiz-application/quiz-application.js'
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -72,9 +72,7 @@ customElements.define('custom-submit-form',
         event.preventDefault()
         this.userName = this.inputBox.firstElementChild.value
         localStorage.setItem('username', this.userName)
-
-        document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application')) // KODA OM?!
-        // document.querySelector('quiz-scoreboard').setAttribute('username', this.userName) // ta bort, lyssnar ej längre på attributet??
+        document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application'))
         this.form.style.display = 'none'
       })
     }
@@ -83,6 +81,6 @@ customElements.define('custom-submit-form',
      * Assigning the input value to variable.
      */
     connectedCallback () {
-      this.inputBox.firstElementChild.value = localStorage.getItem('username') // Ta bort? Ska namnet vara ifyllt vid nästa omgång?
+      this.inputBox.firstElementChild.value = localStorage.getItem('username') // The last used nickname starts as a default name.
     }
   })

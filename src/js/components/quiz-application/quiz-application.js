@@ -104,8 +104,6 @@ customElements.define('quiz-application',
       this.fetchQuestionUrl = 'https://courselab.lnu.se/quiz/question/1'
       this.getAnswerUrl = 'https://courselab.lnu.se/quiz/answer/1'
       this.answerContainer = ''
-      // this.checkLimit = ''
-      // this.timerScore = ''
 
       this.submitBox.addEventListener('click', (event) => {
         event.preventDefault()
@@ -116,15 +114,6 @@ customElements.define('quiz-application',
       addEventListener('hidequizapp', (event) => { // From a customEvent in timer
         this.wrapper.style.display = 'none'
       })
-    }
-
-    /**
-     * Observing the attribute display.
-     *
-     * @returns {string} display.
-     */
-    static get observedAttributes () {
-      return ['display']
     }
 
     /**
@@ -157,7 +146,7 @@ customElements.define('quiz-application',
      * @param {object} data - the retrieved data from server.
      */
     displayQuestionInBrowser (data) {
-      this.question.textContent = data.question.toUpperCase() // Frågan visas i webbläsaren
+      this.question.textContent = data.question.toUpperCase()
       this.dispatchEvent(new CustomEvent('limit', {
         detail: { limit: data.limit },
         bubbles: true
@@ -244,28 +233,6 @@ customElements.define('quiz-application',
         this.answerContainer = this.shadowRoot.querySelector('input[name="answer"]:checked').id.toLowerCase()
       } else {
         this.answerContainer = this.inputBox.firstElementChild.value
-      }
-    }
-
-    /**
-     * Displays the scoreboard when the player chose the wrong answer.
-     *
-     */
-    /*showScoreboard () {
-      this.scoreBoard = document.querySelector('quiz-scoreboard').setAttribute('showscoreboard', 0) // KODA OM?!
-      this.wrapper.style.display = 'none'
-    }*/
-
-    /**
-     * Switch wrapper to style display block when the attribute name === 'display'.
-     *
-     * @param {string} name - attribute.
-     * @param {string} oldValue - oldValue.
-     * @param {string} newValue - newValue.
-     */
-    attributeChangedCallback (name, oldValue, newValue) {
-      if (name === 'display') {
-        this.wrapper.style.display = 'block'
       }
     }
   })

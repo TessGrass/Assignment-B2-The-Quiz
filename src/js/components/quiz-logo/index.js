@@ -1,1 +1,0 @@
-import './quiz-logo.js'

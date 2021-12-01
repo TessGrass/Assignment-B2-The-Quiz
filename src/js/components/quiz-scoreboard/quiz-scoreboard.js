@@ -9,7 +9,7 @@ template.innerHTML = `
       width: 240px;
       height: 260px;
       border-radius: 30px;
-      border: solid 2px #f61e61;
+      border: solid 2px white;
       color: white;
       font-size: 16px;
       font-family: helvetica;
@@ -84,11 +84,8 @@ customElements.define('quiz-scoreboard',
       this.h1Tag = this.shadowRoot.querySelector('h1')
       this.olEl = this.shadowRoot.querySelector('ol')
       this.restartGame = this.shadowRoot.querySelector('.submit')
-      // this.name = 'scoreboard'
-      // this.score = 0
-      // this.userName = ''
 
-      addEventListener('userscore', (event) => { // om användaren klarar spelet och får poäng.
+      addEventListener('userscore', (event) => { // CustomEvent found in quiz-scoreboard.
         this.olEl.textContent = ''
         const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
         const userName = localStorage.getItem('username')
@@ -98,7 +95,7 @@ customElements.define('quiz-scoreboard',
         this.displayScoreboard()
       })
 
-      addEventListener('displayscoreboard', (event) => {  //CustomEvent in timer
+      addEventListener('displayscoreboard', (event) => { // CustomEvent found in quiz-application.
         this.scoreboard.style.display = 'block'
         this.restartGame.style.display = 'block'
         this.h1Tag.textContent = 'GAME OVER!'
@@ -113,7 +110,7 @@ customElements.define('quiz-scoreboard',
      * Displays the scoreboard for the player.
      *
      */
-    displayScoreboard () { // För att visa scoreboarden, oavsett om spelaren klarar spelet eller inte.
+    displayScoreboard () {
       this.olEl.textContent = ''
       const displayHighscore = JSON.parse(localStorage.getItem('highscore'))
       displayHighscore.sort((a, b) => a.score - b.score)
@@ -125,29 +122,4 @@ customElements.define('quiz-scoreboard',
         this.olEl.appendChild(listEl)
       }
     }
-
-    /**
-     * The observed attributes.
-     *
-     * @returns {string} - the observed attributes.
-     */
-    /*static get observedAttributes () {
-      return ['username', 'score', 'showscoreboard'] // Ta bort två attribut?
-    }
-
-    /**
-     * Executes code depended of which name equals attribute.
-     *
-     * @param {string} name - attribute.
-     * @param {string} oldValue - oldValue.
-     * @param {string} newValue - newValue.
-     */
-    /*attributeChangedCallback (name, oldValue, newValue) {
-      if (name === 'showscoreboard') {
-        this.scoreboard.style.display = 'block'
-        this.restartGame.style.display = 'block'
-        this.h1Tag.textContent = 'GAME OVER!'
-        this.displayScoreboard()
-      }
-    }*/
   })

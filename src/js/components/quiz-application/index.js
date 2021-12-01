@@ -1,1 +1,1 @@
-
+import './quiz-application.js'
