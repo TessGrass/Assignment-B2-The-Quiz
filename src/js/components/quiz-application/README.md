@@ -1,6 +1,6 @@
 # &lt;quiz-application&gt;
 
-A web component that represents a countdown timer.
+A web component that represents a quiz application.
 
 ## Methods
 

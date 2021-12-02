@@ -74,11 +74,11 @@ customElements.define('countdown-timer',
     }
 
     /**
-     * Sets userscore to localStorage. Dispatch a custom event with the score.
+     * Sets quiz_userscore to localStorage. Dispatch a custom event with the score.
      */
     updateScoreboard () {
-      const score = localStorage.setItem('userscore', this.highScore)
-      this.dispatchEvent(new CustomEvent('userscore', {
+      const score = localStorage.setItem('quiz_userscore', this.highScore)
+      this.dispatchEvent(new CustomEvent('quiz_userscore', {
         detail: { score: score },
         bubbles: true,
         composed: true

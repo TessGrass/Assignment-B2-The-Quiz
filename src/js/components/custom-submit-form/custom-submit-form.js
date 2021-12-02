@@ -71,7 +71,7 @@ customElements.define('custom-submit-form',
       this.submitBox.addEventListener('click', (event) => {
         event.preventDefault()
         this.userName = this.inputBox.firstElementChild.value
-        localStorage.setItem('username', this.userName)
+        localStorage.setItem('quiz_username', this.userName)
         document.querySelector('.formWrapper').appendChild(document.createElement('quiz-application'))
         this.form.style.display = 'none'
       })
@@ -81,6 +81,6 @@ customElements.define('custom-submit-form',
      * Assigning the input value to variable.
      */
     connectedCallback () {
-      this.inputBox.firstElementChild.value = localStorage.getItem('username') // The last used nickname starts as a default name.
+      this.inputBox.firstElementChild.value = localStorage.getItem('quiz_username') // The last used nickname starts as a default name.
     }
   })

@@ -40,6 +40,6 @@ Starts the countdown timer and when it reaches zero the timer stops.
 ## Example
 
 ```html
-<countdown-timer><countdown-timer></>
+<countdown-timer></countdown-timer></>
 ```
 

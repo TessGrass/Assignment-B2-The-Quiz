@@ -85,13 +85,13 @@ customElements.define('quiz-scoreboard',
       this.olEl = this.shadowRoot.querySelector('ol')
       this.restartGame = this.shadowRoot.querySelector('.submit')
 
-      addEventListener('userscore', (event) => { // CustomEvent found in quiz-scoreboard.
+      addEventListener('quiz_userscore', (event) => { // CustomEvent found in countdown-timer.
         this.olEl.textContent = ''
-        const currentScoreboard = JSON.parse(localStorage.getItem('highscore')) || []
-        const userName = localStorage.getItem('username')
-        const userScore = localStorage.getItem('userscore')
+        const currentScoreboard = JSON.parse(localStorage.getItem('quiz_highscore')) || []
+        const userName = localStorage.getItem('quiz_username')
+        const userScore = localStorage.getItem('quiz_userscore')
         currentScoreboard.push({ name: userName, score: userScore })
-        localStorage.setItem('highscore', JSON.stringify(currentScoreboard))
+        localStorage.setItem('quiz_highscore', JSON.stringify(currentScoreboard))
         this.displayScoreboard()
       })
 
@@ -112,7 +112,7 @@ customElements.define('quiz-scoreboard',
      */
     displayScoreboard () {
       this.olEl.textContent = ''
-      const displayHighscore = JSON.parse(localStorage.getItem('highscore'))
+      const displayHighscore = JSON.parse(localStorage.getItem('quiz_highscore'))
       displayHighscore.sort((a, b) => a.score - b.score)
       displayHighscore.splice(5)
 
