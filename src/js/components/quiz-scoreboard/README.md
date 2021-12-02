@@ -12,7 +12,7 @@ Displays the scoreboard in the browser.
 
 | Event Name | Fired When |
 |------------|------------|
-| `userscore`| the CustomEvent in timer component fires.
+| `quiz_userscore`| the CustomEvent in timer component fires.
 
 | Event Name | Fired When |
 |------------|------------|
